@@ -1,0 +1,28 @@
+{
+    "Group": "g0ldensp00n",
+    "Name": "Gears",
+    "Version": "2026.2.1-32828",
+    "Description": "G0ldenSp00n's Gear Mod",
+    "Authors": [
+        {
+            "Name": "G0ldenSp00n",
+            "Email": "hayden@fithyan.com",
+            "Url": "https://fithyan.com"
+        }
+    ],
+    "Website": "",
+    "ServerVersion": "*",
+    "Dependencies": {
+        "Hytale:EntityModule": "*",
+        "Hytale:AssetModule": "*"
+    },
+    "OptionalDependencies": {
+        
+    },
+    "LoadBefore": {
+        
+    },
+    "DisabledByDefault": false,
+    "IncludesAssetPack": true,
+    "Main": "com.g0ldensp00n.gears.GearsPlugin"
+}
