@@ -14,25 +14,11 @@ import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.server.core.universe.world.World;
 import com.hypixel.hytale.server.core.universe.world.storage.ChunkStore;
 
-public class ShaftBlock implements Component<ChunkStore> {
-  public static int VERISON = 1;
-
-  public static final BuilderCodec<ShaftBlock> CODEC = BuilderCodec.builder(ShaftBlock.class, ShaftBlock::new)
+public class ShaftBlock extends RotationalBlock {
+  public static final BuilderCodec<ShaftBlock> CODEC = BuilderCodec
+      .builder(ShaftBlock.class, ShaftBlock::new, RotationalBlock.CODEC)
       .versioned().codecVersion(VERISON)
-      .append(
-          new KeyedCodec<>("Rotation Speed", Codec.INTEGER),
-          (shaftBlock, rotationSpeed) -> shaftBlock.rotationSpeed = rotationSpeed,
-          shaftBlock -> shaftBlock.rotationSpeed == 0 ? null : shaftBlock.rotationSpeed)
-      .add()
-      .append(new KeyedCodec<>("RotationNetworkID", Codec.UUID_BINARY),
-          (state, rotationNetworkID) -> state.rotationNetworkID = rotationNetworkID,
-          state -> state.rotationNetworkID)
-      .add()
       .build();
-
-  protected int rotationSpeed;
-  @Nullable
-  protected UUID rotationNetworkID;
 
   public ShaftBlock() {
   }
@@ -40,42 +26,25 @@ public class ShaftBlock implements Component<ChunkStore> {
   public ShaftBlock(
       UUID rotationNetworkId,
       int speed) {
-    this.rotationNetworkID = rotationNetworkId;
-    this.rotationSpeed = speed;
-  }
-
-  public int getRotationSpeed() {
-    return this.rotationSpeed;
-  }
-
-  public void setRotationSpeed(int rotationSpeed) {
-    this.rotationSpeed = rotationSpeed;
-  }
-
-  public UUID getRotationNetworkID() {
-    return this.rotationNetworkID;
-  }
-
-  public void setRotationNetworkID(UUID rotationNetworkID) {
-    this.rotationNetworkID = rotationNetworkID;
+    super(rotationNetworkId, speed);
   }
 
   public static ComponentType<ChunkStore, ShaftBlock> getComponentType() {
     return GearsPlugin.get().getShaftBlockComponentType();
   }
 
-  @Override
-  public String toString() {
-    String rotationId = "null";
-    if (this.rotationNetworkID != null) {
-      rotationId = this.rotationNetworkID.toString();
-    }
-    return "ShaftBlock{rotationNetworkID="
-        + rotationId
-        + ", rotationSpeed="
-        + this.rotationSpeed
-        + "}";
-  }
+  // @Override
+  // public String toString() {
+  // String rotationId = "null";
+  // if (this.rotationNetworkID != null) {
+  // rotationId = this.rotationNetworkID.toString();
+  // }
+  // return "ShaftBlock{rotationNetworkID="
+  // + rotationId
+  // + ", rotationSpeed="
+  // + this.rotationSpeed
+  // + "}";
+  // }
 
   @Nullable
   @Override

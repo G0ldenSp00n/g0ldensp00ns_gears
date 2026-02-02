@@ -7,6 +7,7 @@ import javax.annotation.Nullable;
 
 import com.g0ldensp00n.gears.entities.RotationNetworkEntity;
 import com.g0ldensp00n.gears.states.GearBlock;
+import com.g0ldensp00n.gears.states.RotationalBlock;
 import com.g0ldensp00n.gears.states.ShaftBlock;
 import com.hypixel.hytale.component.AddReason;
 import com.hypixel.hytale.component.ComponentRegistryProxy;
