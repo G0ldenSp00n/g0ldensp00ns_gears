@@ -1,18 +1,15 @@
 package com.g0ldensp00n.gears.states;
 
 import java.util.UUID;
-import java.util.function.Function;
 
 import javax.annotation.Nullable;
 
-import com.g0ldensp00n.gears.GearsPlugin;
+import com.g0ldensp00n.gears.Stress;
 import com.g0ldensp00n.gears.StressCapacity;
 import com.hypixel.hytale.codec.Codec;
-import com.hypixel.hytale.codec.DirectDecodeCodec;
 import com.hypixel.hytale.codec.KeyedCodec;
 import com.hypixel.hytale.codec.builder.BuilderCodec;
 import com.hypixel.hytale.component.Component;
-import com.hypixel.hytale.component.ComponentType;
 import com.hypixel.hytale.server.core.universe.world.storage.ChunkStore;
 
 public abstract class RotationalBlock implements Component<ChunkStore> {
@@ -21,38 +18,43 @@ public abstract class RotationalBlock implements Component<ChunkStore> {
   public static final BuilderCodec<RotationalBlock> CODEC = BuilderCodec
       .abstractBuilder(RotationalBlock.class)
       .versioned().codecVersion(VERISON)
-      .append(
-          new KeyedCodec<>("Rotation Speed", Codec.INTEGER),
-          (shaftBlock, rotationSpeed) -> shaftBlock.rotationSpeed = rotationSpeed,
-          shaftBlock -> shaftBlock.rotationSpeed == 0 ? null : shaftBlock.rotationSpeed)
+      .append(new KeyedCodec<>("RotationNetworkID", Codec.UUID_BINARY),
+          (state, rotationNetworkID) -> state.rotationNetworkID = rotationNetworkID,
+          state -> state.rotationNetworkID)
       .add()
       .append(
-          new KeyedCodec<>("Rotation Stress Capacity", StressCapacity.STRESS_CAPACITY_STRING),
+          new KeyedCodec<>("RotationSpeed", Codec.INTEGER),
+          (shaftBlock, rotationSpeed) -> shaftBlock.rotationSpeed = rotationSpeed,
+          shaftBlock -> shaftBlock.rotationSpeed)
+      .add()
+      .append(
+          new KeyedCodec<>("RotationStressCapacity", StressCapacity.STRESS_CAPACITY),
           (shaftBlock, rotationStressCapacity) -> {
             shaftBlock.rotationStressCapacity = rotationStressCapacity;
           },
           shaftBlock -> shaftBlock.rotationStressCapacity)
       .add()
-
-      .append(new KeyedCodec<>("RotationNetworkID", Codec.UUID_BINARY),
-          (state, rotationNetworkID) -> state.rotationNetworkID = rotationNetworkID,
-          state -> state.rotationNetworkID)
+      .append(new KeyedCodec<>("IsOverstressed", Codec.BOOLEAN),
+          (state, isOverstressed) -> state.isOverstressed = isOverstressed,
+          state -> state.isOverstressed)
       .add()
       .build();
 
   @Nullable
   protected UUID rotationNetworkID;
-  protected int rotationSpeed;
-  protected StressCapacity rotationStressCapacity;
+  protected int rotationSpeed = 0;
+  protected StressCapacity rotationStressCapacity = new Stress(0);
+  protected boolean isOverstressed = false;
 
   public RotationalBlock() {
   }
 
   public RotationalBlock(
       UUID rotationNetworkId,
-      int speed) {
+      int speed, StressCapacity stressCapacity) {
     this.rotationNetworkID = rotationNetworkId;
     this.rotationSpeed = speed;
+    this.rotationStressCapacity = stressCapacity;
   }
 
   public int getRotationSpeed() {
@@ -77,13 +79,17 @@ public abstract class RotationalBlock implements Component<ChunkStore> {
     if (this.rotationNetworkID != null) {
       rotationId = this.rotationNetworkID.toString();
     }
+    String rotationStressCapacity = "null";
+    if (this.rotationStressCapacity != null) {
+      rotationStressCapacity = this.rotationStressCapacity.toString();
+    }
     String className = this.getClass().getCanonicalName();
     return className + "{rotationNetworkID="
         + rotationId
         + ", rotationSpeed="
         + this.rotationSpeed
         + ", rotationStressCapacity="
-        + this.rotationStressCapacity.toString()
+        + rotationStressCapacity
         + "}";
   }
 

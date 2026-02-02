@@ -1,6 +1,8 @@
 package com.g0ldensp00n.gears.entities;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.UUID;
 import java.util.logging.Level;
 
@@ -8,6 +10,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import com.g0ldensp00n.gears.GearsPlugin;
+import com.g0ldensp00n.gears.states.RotationalBlock;
 import com.g0ldensp00n.gears.states.ShaftBlock;
 import com.hypixel.hytale.codec.Codec;
 import com.hypixel.hytale.codec.KeyedCodec;
@@ -29,18 +32,16 @@ public class RotationNetworkEntity extends Entity {
           (rotationNetworkEntity, rotationNetworkId) -> rotationNetworkEntity.rotationNetworkId = rotationNetworkId,
           rotationNetworkEntity -> rotationNetworkEntity.rotationNetworkId)
       .add()
-      .append(
-          new KeyedCodec<>("Rotation Stress", Codec.INTEGER),
-          (rotationNetworkEntity, rotationStress) -> rotationNetworkEntity.rotationStress = rotationStress,
-          rotationNetworkEntity -> rotationNetworkEntity.rotationStress)
-      .add()
-
       .build();
 
   private UUID rotationNetworkId;
-  protected int rotationStress;
+
+  private Map<RotationalBlock, Float> sources;
+  private Map<RotationalBlock, Float> members;
 
   public RotationNetworkEntity() {
+    sources = new HashMap<>();
+    members = new HashMap<>();
   }
 
   public void initialise(@Nonnull UUID id) {

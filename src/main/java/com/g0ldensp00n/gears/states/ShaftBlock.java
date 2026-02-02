@@ -5,6 +5,7 @@ import java.util.UUID;
 import javax.annotation.Nullable;
 
 import com.g0ldensp00n.gears.GearsPlugin;
+import com.g0ldensp00n.gears.StressCapacity;
 import com.hypixel.hytale.codec.Codec;
 import com.hypixel.hytale.codec.KeyedCodec;
 import com.hypixel.hytale.codec.builder.BuilderCodec;
@@ -25,8 +26,8 @@ public class ShaftBlock extends RotationalBlock {
 
   public ShaftBlock(
       UUID rotationNetworkId,
-      int speed) {
-    super(rotationNetworkId, speed);
+      int speed, StressCapacity stressCapacity) {
+    super(rotationNetworkId, speed, stressCapacity);
   }
 
   public static ComponentType<ChunkStore, ShaftBlock> getComponentType() {
@@ -49,6 +50,6 @@ public class ShaftBlock extends RotationalBlock {
   @Nullable
   @Override
   public Component<ChunkStore> clone() {
-    return new ShaftBlock(this.rotationNetworkID, this.rotationSpeed);
+    return new ShaftBlock(this.rotationNetworkID, this.rotationSpeed, this.rotationStressCapacity);
   }
 }

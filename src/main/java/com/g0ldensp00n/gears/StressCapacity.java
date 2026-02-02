@@ -6,7 +6,7 @@ import com.hypixel.hytale.codec.Codec;
 import com.hypixel.hytale.codec.function.FunctionCodec;
 
 public sealed interface StressCapacity permits Stress, Capacity {
-  public static final FunctionCodec<String, StressCapacity> STRESS_CAPACITY_STRING = new FunctionCodec<>(Codec.STRING,
+  public static final FunctionCodec<String, StressCapacity> STRESS_CAPACITY = new FunctionCodec<>(Codec.STRING,
       StressCapacity::fromString, StressCapacity::toString);
 
   public String toString();
